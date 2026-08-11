@@ -33,7 +33,9 @@ function App() {
       });
 
       if (!submitRes.ok) {
-        throw new Error(`Failed to submit analysis: ${submitRes.statusText}`);
+        let errorText = '';
+        try { errorText = await submitRes.text(); } catch(e) {}
+        throw new Error(`Failed to submit analysis: HTTP ${submitRes.status} ${submitRes.statusText} - ${errorText}`);
       }
 
       const submitData = await submitRes.json();
